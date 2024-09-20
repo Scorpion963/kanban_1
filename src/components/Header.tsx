@@ -6,6 +6,7 @@ import {
 import { Button } from "./ui/button";
 import { EllipsisVertical } from "lucide-react";
 
+
 export default async function Header() {
   return (
     <div className="flex w-full items-center justify-between bg-secondary/90 p-6">
@@ -18,7 +19,7 @@ export default async function Header() {
               <EllipsisVertical />
             </Button>
           </PopoverTrigger>
-          <PopoverContent className="w-36 mr-6 mt-2">
+          <PopoverContent className="mr-6 mt-2 w-36">
             <div className="flex flex-col overflow-hidden rounded-lg">
               <Button className="justify-start rounded-none">Edit Board</Button>
               <Button className="justify-start rounded-none">

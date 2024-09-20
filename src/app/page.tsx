@@ -1,26 +1,28 @@
-import Link from "next/link";
+import { addBoard } from "~/actions/action";
 import MainContent from "~/components/MainContent";
+import Modal from "~/components/Modal";
 import Sidebar from "~/components/Sidebar";
 import { SidebarMain } from "~/components/SidebarMain";
+import SimpleForm from "~/components/SimpleForm";
 
-export default function Main({
-  searchParams,
-}: {
+export type searchParamsType = {
   searchParams: Record<string, string> | null | undefined;
-}) {
-  const showModal = searchParams?.add_board_modal === "true";
+};
 
+export default function Main({ searchParams }: searchParamsType) {
   return (
     <div>
       <Sidebar main_page={<MainContent />}>
         <SidebarMain />
       </Sidebar>
-      {showModal && (
-        <div className="absolute z-10 top-0 h-screen w-full">
-          <Link replace href="/" className="absolute h-screen w-full bg-black opacity-50"></Link>
-          <div className="absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 h-96 w-52 rounded-lg bg-white"></div>
-        </div>
-      )}
+      <Modal searchParams={searchParams} name="add_board_modal">
+        <SimpleForm
+          form_action={addBoard}
+          label="Name"
+          name="name"
+          buttonName="Add"
+        />
+      </Modal>
     </div>
   );
 }
