@@ -1,11 +1,15 @@
-"use client";
-
 import { useTheme } from "next-themes";
 import { Label } from "./ui/label";
 import { Switch } from "./ui/switch";
+import { useEffect, useState } from "react";
 
 export default function ThemeToggle() {
   const { setTheme, resolvedTheme } = useTheme();
+  const [currentTheme, setCurrentTheme] = useState<string>("");
+
+  useEffect(() => {
+    setCurrentTheme(resolvedTheme === "dark" ? "light" : "dark");
+  }, [resolvedTheme]);
 
   const handleThemeSwitch = () => {
     return setTheme(resolvedTheme === "dark" ? "light" : "dark");
@@ -19,7 +23,7 @@ export default function ThemeToggle() {
         id="dark-mode-toggle"
       />
       <Label htmlFor="dark-mode-toggle">
-        <div className="text-slate-400  ">Switch to {resolvedTheme === "dark" ? "light" : "dark"} mode</div>
+        <div className="text-slate-400">Switch to {currentTheme} mode</div>
       </Label>
     </div>
   );
