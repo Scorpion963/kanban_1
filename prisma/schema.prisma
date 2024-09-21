@@ -23,12 +23,14 @@ model Board {
 }
 
 model Column {
-    id        String   @id @default(cuid())
-    name      String
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
-    Board     Board?   @relation(fields: [boardId], references: [id])
-    boardId   String?
+    id           String   @id @default(cuid())
+    name         String
+    status_color String
+    createdAt    DateTime @default(now())
+    updatedAt    DateTime @updatedAt
+
+    Board   Board?  @relation(fields: [boardId], references: [id])
+    boardId String?
 
     Task Task[]
 
