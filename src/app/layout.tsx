@@ -5,6 +5,7 @@ import { type Metadata } from "next";
 import { ThemeProvider } from "~/components/theme-provider";
 import Sidebar from "~/components/Sidebar";
 import { SidebarMain } from "~/components/SidebarMain";
+import { TasksProvider } from "~/hooks/TasksProvider";
 
 export const metadata: Metadata = {
   title: "Create T3 App",
@@ -19,12 +20,14 @@ export default function RootLayout({
     <html lang="en" className={`${GeistSans.variable}`}>
       <body>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          <div className="flex">
-            <Sidebar>
-              <SidebarMain />
-            </Sidebar>
-            {children}
-          </div>
+          <TasksProvider>
+            <div className="flex">
+              <Sidebar>
+                <SidebarMain />
+              </Sidebar>
+              {children}
+            </div>
+          </TasksProvider>
         </ThemeProvider>
       </body>
     </html>

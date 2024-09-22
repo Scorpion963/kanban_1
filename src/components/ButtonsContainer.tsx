@@ -5,8 +5,8 @@ import Modal from "./Modal";
 
 export default async function ButtonsContainer() {
   const user = await currentUser();
-  if (!user?.id) return <>You must be logged in</>;
-  const boards = await db.board.findMany({ where: { owner: user.id } });
+  
+  const boards = await db.board.findMany({ where: { owner: user?.id } });
   
   return (
     <div className="flex flex-col pr-4">

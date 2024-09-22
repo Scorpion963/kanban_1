@@ -1,3 +1,4 @@
+import ActivateTaskContext from "~/components/ActivateTaskContext";
 import ColumnContainer from "~/components/ColumnContainer";
 import Header from "~/components/Header";
 import { db } from "~/server/db";
@@ -11,8 +12,9 @@ export default async function TasksSection({params}: {params: {id: string}}) {
     const colors = await db.column.findMany({where: {boardId: board.id}, select: {status_color: true, id: true}})
   if(!colors) return <></>
 
-    return <div className="w-full h-screen">
+    return <div className="w-full h-screen flex flex-col">
         <Header colors={colors} text={board.name} id={params.id} />
         <ColumnContainer colors={colors} id={params.id} />
+        <ActivateTaskContext id={params.id} />
     </div>
 }

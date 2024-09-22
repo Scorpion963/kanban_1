@@ -18,21 +18,22 @@ type TaskFormProps = {
   >;
   isOpen: boolean;
   subtasks: {
-    name: string;
     id: string;
-  }[];
-  setSubtasks: React.Dispatch<
-    React.SetStateAction<
-      {
-        name: string;
-        id: string;
-      }[]
-    >
-  >;
+    name: string;
+    completed?: boolean;
+    taskId?: string | null;
+}[];
+  setSubtasks: React.Dispatch<React.SetStateAction<{
+    id: string;
+    name: string;
+    completed?: boolean;
+    taskId?: string | null;
+}[]>>
   colors: {
     status_color: string;
     id: string
   }[];
+  defaultColor?: string | undefined
 };
 
 export default function TaskForm({
@@ -42,6 +43,7 @@ export default function TaskForm({
   setSubtasks,
   subtasks,
   colors,
+  defaultColor
 }: TaskFormProps) {
   return (
     <>
@@ -120,7 +122,7 @@ export default function TaskForm({
               </div>
               <div className="space-y-2">
                 <Label className="text-sm font-semibold">Status</Label>
-                <FormSelect colors={colors} />
+                <FormSelect defaultColor={defaultColor} colors={colors} />
               </div>
             </SimpleForm>
           </RawModal>

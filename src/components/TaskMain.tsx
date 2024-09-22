@@ -1,13 +1,14 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import RawModal from "./RawModal";
 import { Button } from "./ui/button";
 import { EllipsisVertical } from "lucide-react";
 import { Checkbox } from "./ui/checkbox";
 import { Label } from "./ui/label";
 import FormSelect from "./FormSelect";
-import { updateTask } from "~/actions/action";
+import { updateFullTask, updateTask } from "~/actions/action";
+import TaskForm from "./TaskForm";
 
 type TaskMainProps = {
   name: string;
@@ -37,19 +38,49 @@ export function TaskMain({
   taskId,
 }: TaskMainProps) {
   const [isOpen, setIsOpen] = useState(false);
-  const [currentSubtasks, setCurrentSubtasks] = useState(subtasks);
+  const [editTaskIsOpen, setEditTaskIsOpen] = useState(false)
+  const [currentSubtasks, setCurrentSubtasks] = useState<{
+    id: string;
+    name: string;
+    completed?: boolean;
+    taskId?: string | null;
+}[]>(subtasks);
+
+
+  useEffect(() => console.log("Current task", taskId),[currentSubtasks])
+
+  const [newSubtasks, setNewSubtasks] = useState<{
+    name: string;
+    id: string;
+}[]>(currentSubtasks)
+
   const formRef = useRef<HTMLFormElement>(null);
+
   const handleIsOpen = () => {
     setIsOpen((prev) => !prev);
     formRef.current?.requestSubmit();
   };
-
+  
   const currentColor = colors.find((item) => item.id === columnId);
+
+  const handleEditTaskIsOpen = () => {
+    setEditTaskIsOpen(prev => !prev)
+  }
+
+  const handleUpdateTask = async (formData: FormData) => {
+    console.log("HERE")
+
+    formData.append('Subtasks', JSON.stringify(currentSubtasks))
+    const res = await updateFullTask(formData, taskId);
+    
+    console.log(res)
+    return res;
+  };
 
   return (
     <>
       <div
-        onClick={handleIsOpen}
+        onClick={() => setIsOpen(prev => !prev)}
         className="w-full cursor-pointer rounded-lg bg-secondary/90 px-4 py-5 hover:bg-secondary"
       >
         <div className="font-semibold">{name}</div>
@@ -63,7 +94,7 @@ export function TaskMain({
             <div className="space-y-3 text-sm">
               <div className="flex items-center justify-between">
                 <h1 className="text-xl font-semibold">{name}</h1>
-                <Button className="bg-transparent px-2 py-4">
+                <Button onClick={() => handleEditTaskIsOpen()} className="bg-transparent px-2 py-4">
                   <EllipsisVertical size={24} />
                 </Button>
               </div>
@@ -108,6 +139,7 @@ export function TaskMain({
                 ref={formRef}
                 action={async (f: FormData) => {
                   f.append("Subtasks", JSON.stringify(currentSubtasks));
+                  console.log("Secondary form is being used")
                   const res = await updateTask(f, taskId);
                   console.log(res)
                 }}
@@ -115,7 +147,7 @@ export function TaskMain({
               >
                 <Label>Current Status</Label>
                 <FormSelect
-                  defaultColor={currentColor && currentColor.id}
+                  defaultColor={currentColor ? currentColor.id : undefined}
                   colors={colors}
                 />
               </form>
@@ -123,6 +155,16 @@ export function TaskMain({
           </RawModal>
         </div>
       )}
+
+      {editTaskIsOpen && <TaskForm
+          handleAddTask={handleUpdateTask}
+          handleIsOpen={handleEditTaskIsOpen}
+          isOpen={editTaskIsOpen}
+          subtasks={currentSubtasks}
+          setSubtasks={setCurrentSubtasks}
+          colors={colors}
+          defaultColor={currentColor ? currentColor.id : undefined}
+        />}
     </>
   );
 }
