@@ -41,9 +41,9 @@ model Task {
     id          String   @id @default(cuid())
     name        String
     description String
-    Status      String
     createdAt   DateTime @default(now())
     updatedAt   DateTime @updatedAt
+
     Column      Column?  @relation(fields: [columnId], references: [id])
     columnId    String?
 
@@ -55,7 +55,7 @@ model Task {
 model Subtask {
     id        String  @id @default(cuid())
     name      String
-    completed Boolean
+    completed Boolean @default(false)
     Task      Task?   @relation(fields: [taskId], references: [id])
     taskId    String?
 }

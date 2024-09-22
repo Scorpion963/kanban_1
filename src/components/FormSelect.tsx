@@ -7,6 +7,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "./ui/select";
+import { v4 as uuidv4 } from "uuid";
 
 export const tailwindBgColors = [
   "bg-red-500",
@@ -31,23 +32,46 @@ export const tailwindBgColors = [
   "bg-red-600",
 ] as const;
 
-export default function FormSelect() {
+export const tailwindBgColorObjects = tailwindBgColors.map((color) => ({
+  status_color: color,
+}));
+
+export default function FormSelect({
+  colors = tailwindBgColorObjects,
+  defaultColor,
+}: {
+  colors?: {
+    status_color: string;
+    id?: string;
+  }[];
+  defaultColor?: string;
+}) {
+  console.log(defaultColor);
   return (
-    <Select name="Color">
+    <Select defaultValue={defaultColor} name="Color">
       <SelectTrigger>
         <SelectValue placeholder="Select a label..." />
       </SelectTrigger>
       <SelectContent>
         <SelectGroup>
           <SelectLabel>Label</SelectLabel>
-          {tailwindBgColors.map((item, index) => (
-            <SelectItem key={item} value={item}>
-              <div className="flex items-center gap-3">
-                <div className={`${item} size-3 rounded-full`}></div>
-                <div>Color {index}</div>
-              </div>
-            </SelectItem>
-          ))}
+          {colors.map((item, index) => {
+            console.log(item.id, " ", defaultColor);
+            console.log(item.id === defaultColor);
+            return (
+              <SelectItem
+                key={uuidv4()}
+                value={item.id ? item.id : item.status_color}
+              >
+                <div className="flex items-center gap-3">
+                  <div
+                    className={`${item.status_color} size-3 rounded-full`}
+                  ></div>
+                  <div>Color {index}</div>
+                </div>
+              </SelectItem>
+            );
+          })}
         </SelectGroup>
       </SelectContent>
     </Select>

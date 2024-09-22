@@ -40,7 +40,7 @@ export default function SimpleForm({
         else handleIsOpen();
       }}
     >
-      <h1 className="text-xl font-semibold">{header}</h1>
+      <h1 className="text-2xl py-2 font-semibold">{header}</h1>
       <div className="space-y-2">
         <Label className="font-semibold" htmlFor={name}>
           {name}

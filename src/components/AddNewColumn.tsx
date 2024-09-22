@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Button } from "./ui/button";
 import RawModal from "./RawModal";
 import SimpleForm from "./SimpleForm";
-import { addBoard, addColumn } from "~/actions/action";
+import { addColumn } from "~/actions/action";
 import { Label } from "./ui/label";
 import FormSelect from "./FormSelect";
 
